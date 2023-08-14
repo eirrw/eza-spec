@@ -14,6 +14,7 @@ URL:            https://crates.io/crates/eza
 Source:         %{crates_source}
 
 BuildRequires:  rust-packaging >= 21
+BuildRequires:  pandoc
 
 %global _description %{expand:
 A modern replacement for ls.}
@@ -32,6 +33,12 @@ Summary:        %{summary}
 %doc CONTRIBUTING.md
 %doc README.md
 %doc SECURITY.md
+%{_mandir}/man1/eza.1*
+%{_mandir}/man5/eza_colors.5*
+%{_mandir}/man5/eza_colors-explanation.5*
+%{_datadir}/bash-completion/completions/eza
+%{_datadir}/fish/vendor_completions.d/eza.fish
+%{_datadir}/zsh/site-functions/_eza
 %{_bindir}/eza
 
 %prep
@@ -43,9 +50,23 @@ Summary:        %{summary}
 
 %build
 %cargo_build
+mkdir -p "${CARGO_TARGET_DIR:-target}/man"
+pandoc --standalone -f markdown -t man man/eza.1.md                     > "${CARGO_TARGET_DIR:-target}/man/eza.1"
+pandoc --standalone -f markdown -t man man/eza_colors.5.md              > "${CARGO_TARGET_DIR:-target}/man/eza_colors.5"
+pandoc --standalone -f markdown -t man man/eza_colors-explanation.5.md  > "${CARGO_TARGET_DIR:-target}/man/eza_colors-explanation.5"
 
 %install
 %cargo_install
+install -Dpm0644 -t %{buildroot}%{_mandir}/man1 \
+    ${CARGO_TARGET_DIR:-target}/man/eza.1
+install -Dpm0644 -t %{buildroot}%{_mandir}/man5 \
+    ${CARGO_TARGET_DIR:-target}/man/eza_colors.5 ${CARGO_TARGET_DIR:-target}/man/eza_colors-explanation.5
+install -Dpm0644 -t %{buildroot}%{_datadir}/bash-completion/completions \
+    completions/bash/eza
+install -Dpm0644 -t %{buildroot}%{_datadir}/fish/vendor_completions.d \
+    completions/fish/eza.fish
+install -Dpm0644 -t %{buildroot}%{_datadir}/zsh/site-functions \
+    completions/zsh/_eza
 
 %if %{with check}
 %check
@@ -59,13 +80,5 @@ Summary:        %{summary}
 * Mon Aug 14 2023 Eir Wilson <fedora@eirrw.com> 0.10.7-2
 - use cargo release flag
 
-* Mon Aug 14 2023 Eir Wilson <fedora@eirrw.com>
-- 
-
-* Mon Aug 14 2023 Eir Wilson <fedora@eirrw.com>
-- use release flag
-
 * Mon Aug 14 2023 Eir Wilson <fedora@eirrw.com> 0.10.7-1
 - new package built with tito
-
-%autochangelog
