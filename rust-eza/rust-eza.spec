@@ -2,10 +2,11 @@
 %bcond_without check
 
 %global crate eza
+%global cargo-args --release
 
 Name:           rust-eza
 Version:        0.10.7
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Modern replacement for ls
 
 License:        MIT
@@ -52,6 +53,15 @@ Summary:        %{summary}
 %endif
 
 %changelog
+* Mon Aug 14 2023 Eir Wilson <fedora@eirrw.com> 0.10.7-2
+- use cargo release flag
+
+* Mon Aug 14 2023 Eir Wilson <fedora@eirrw.com>
+- 
+
+* Mon Aug 14 2023 Eir Wilson <fedora@eirrw.com>
+- use release flag
+
 * Mon Aug 14 2023 Eir Wilson <fedora@eirrw.com> 0.10.7-1
 - new package built with tito
 
