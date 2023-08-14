@@ -52,4 +52,7 @@ Summary:        %{summary}
 %endif
 
 %changelog
+* Mon Aug 14 2023 Eir Wilson <fedora@eirrw.com> 0.10.7-1
+- new package built with tito
+
 %autochangelog
