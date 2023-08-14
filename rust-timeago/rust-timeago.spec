@@ -78,4 +78,7 @@ use the "default" feature of the "%{crate}" crate.
 %endif
 
 %changelog
+* Mon Aug 14 2023 Eir Wilson <fedora@eirrw.com> 0.3.1-1
+- new package built with tito
+
 %autochangelog
