@@ -2,7 +2,7 @@
 %bcond_without check
 
 %global crate eza
-%global cargo-args --release
+%global debug_package %{nil}
 
 Name:           rust-eza
 Version:        0.10.7
