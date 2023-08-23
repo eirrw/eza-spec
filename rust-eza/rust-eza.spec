@@ -6,7 +6,7 @@
 
 Name:           rust-eza
 Version:        0.10.8
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        Modern replacement for ls
 
 License:        MIT
@@ -86,6 +86,9 @@ install -Dpm0644 -t %{buildroot}%{_datadir}/zsh/site-functions \
 %endif
 
 %changelog
+* Tue Aug 22 2023 Eir Wilson <fedora@eirrw.com> 0.10.8-1
+- update version; rebuild specfile (fedora@eirrw.com)
+
 * Mon Aug 14 2023 Eir Wilson <fedora@eirrw.com> 0.10.7-4
 - add manfiles and completions (fedora@eirrw.com)
 
