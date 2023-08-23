@@ -5,15 +5,15 @@
 %global debug_package %{nil}
 
 Name:           rust-eza
-Version:        0.10.7
-Release:        4%{?dist}
+Version:        0.10.8
+Release:        1%{?dist}
 Summary:        Modern replacement for ls
 
 License:        MIT
 URL:            https://crates.io/crates/eza
 Source:         %{crates_source}
 
-BuildRequires:  rust-packaging >= 21
+BuildRequires:  rust-packaging >= 23
 BuildRequires:  pandoc
 
 %global _description %{expand:
@@ -23,11 +23,20 @@ A modern replacement for ls.}
 
 %package     -n %{crate}
 Summary:        %{summary}
+# (MIT OR Apache-2.0) AND BSD-3-Clause AND GPL-2.0-only WITH GCC-exception-2.0 AND MIT
+# MIT
+# MIT OR Apache-2.0
+# MIT OR Apache-2.0 OR Zlib
+# Unlicense OR MIT
+# Zlib OR Apache-2.0 OR MIT
+License:        MIT AND (MIT OR Apache-2.0) AND (MIT OR Apache-2.0 OR Zlib) AND (Zlib OR Apache-2.0 OR MIT) AND (Unlicense OR MIT) AND ((MIT OR Apache-2.0) AND BSD-3-Clause AND GPL-2.0-only WITH GCC-exception-2.0 AND MIT)
+# LICENSE.dependencies contains a full license breakdown
 
 %description -n %{crate} %{_description}
 
 %files       -n %{crate}
 %license LICENCE
+%license LICENSE.dependencies
 %doc CHANGELOG.md
 %doc CODE_OF_CONDUCT.md
 %doc CONTRIBUTING.md
@@ -50,17 +59,20 @@ Summary:        %{summary}
 
 %build
 %cargo_build
-mkdir -p "${CARGO_TARGET_DIR:-target}/man"
-pandoc --standalone -f markdown -t man man/eza.1.md                     > "${CARGO_TARGET_DIR:-target}/man/eza.1"
-pandoc --standalone -f markdown -t man man/eza_colors.5.md              > "${CARGO_TARGET_DIR:-target}/man/eza_colors.5"
-pandoc --standalone -f markdown -t man man/eza_colors-explanation.5.md  > "${CARGO_TARGET_DIR:-target}/man/eza_colors-explanation.5"
+%{cargo_license_summary}
+%{cargo_license} > LICENSE.dependencies
+mkdir -p "target/man"
+pandoc --standalone -f markdown -t man man/eza.1.md                     > "target/man/eza.1"
+pandoc --standalone -f markdown -t man man/eza_colors.5.md              > "target/man/eza_colors.5"
+pandoc --standalone -f markdown -t man man/eza_colors-explanation.5.md  > "target/man/eza_colors-explanation.5"
 
 %install
 %cargo_install
 install -Dpm0644 -t %{buildroot}%{_mandir}/man1 \
-    ${CARGO_TARGET_DIR:-target}/man/eza.1
+    target/man/eza.1
 install -Dpm0644 -t %{buildroot}%{_mandir}/man5 \
-    ${CARGO_TARGET_DIR:-target}/man/eza_colors.5 ${CARGO_TARGET_DIR:-target}/man/eza_colors-explanation.5
+    target/man/eza_colors.5 \
+    target/man/eza_colors-explanation.5
 install -Dpm0644 -t %{buildroot}%{_datadir}/bash-completion/completions \
     completions/bash/eza
 install -Dpm0644 -t %{buildroot}%{_datadir}/fish/vendor_completions.d \
