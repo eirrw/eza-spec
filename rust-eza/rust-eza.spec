@@ -6,7 +6,7 @@
 
 Name:           rust-eza
 Version:        0.10.8
-Release:        1%{?dist}
+Release:        0%{?dist}
 Summary:        Modern replacement for ls
 
 License:        MIT
